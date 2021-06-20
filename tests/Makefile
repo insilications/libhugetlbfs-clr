@@ -1,4 +1,4 @@
-PREFIX = /usr/local
+PREFIX = /usr
 
 LIB_TESTS = gethugepagesize test_root find_path unlinked_fd misalign \
 	readback truncate shared private fork-cow empty_mounts large_mounts \
@@ -33,8 +33,8 @@ HELPERS = get_hugetlbfs_path compare_kvers
 HELPER_LIBS = libheapshrink.so
 BADTOOLCHAIN = bad-toolchain.sh
 
-CFLAGS = -O2 -Wall -g
-CPPFLAGS = -I..
+LDFLAGS += -ldl
+CPPFLAGS += -I..
 STATIC_LIBHUGE = -Wl,--whole-archive -lhugetlbfs -Wl,--no-whole-archive
 STATIC_LDLIBS = -Wl,--no-as-needed -lpthread
 LDLIBS = $(STATIC_LDLIBS) -ldl -lhugetlbfs_privutils
@@ -173,11 +173,11 @@ $(NOLIB_TESTS:%=obj64/%): %: %.o obj64/testutils.o
 
 obj32/%.ldscript: obj32/%.o obj32/testutils.o
 	@$(VECHO) SCRIPT32 $@
-	$(CC32) $(LDFLAGS) $(LDFLAGS32) -Wl,--verbose -o/dev/null $^ $(LDLIBS) > $@
+	$(CC32) $(LDFLAGS) $(LDFLAGS32) -Wl,--verbose -o/tmp/null $^ $(LDLIBS) > $@
 
 obj64/%.ldscript: obj64/%.o obj64/testutils.o
 	@$(VECHO) SCRIPT64 $@
-	$(CC64) $(LDFLAGS) $(LDFLAGS64) -Wl,--verbose -o/dev/null $^ $(LDLIBS) > $@
+	$(CC64) $(LDFLAGS) $(LDFLAGS64) -Wl,--verbose -o/tmp/null $^ $(LDLIBS) > $@
 
 $(LDSCRIPT_TESTS:%=obj32/%): obj32/%: %.ld obj32/%.o obj32/testutils.o
 	@$(VECHO) LD32 "(preload test)" $@

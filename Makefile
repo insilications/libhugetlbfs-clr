@@ -1,4 +1,4 @@
-PREFIX ?= /usr/local
+PREFIX ?= /usr
 EXEDIR ?= /bin
 
 LIBOBJS = hugeutils.o version.o init.o morecore.o debug.o alloc.o shm.o kernel-features.o
@@ -26,14 +26,13 @@ NODEPTARGETS=<version.h> <clean>
 INSTALL = install
 
 LDFLAGS += -ldl
-CFLAGS ?= -O2 -g
 CFLAGS += -Wall -fPIC
 CPPFLAGS += -D__LIBHUGETLBFS__
 
 ARCH ?= $(shell uname -m | sed -e s/i.86/i386/)
 CC ?= gcc
 
-CUSTOM_LDSCRIPTS = yes
+CUSTOM_LDSCRIPTS = no
 
 ifeq ($(ARCH),ppc64)
 CC64 = $(CC) -m64

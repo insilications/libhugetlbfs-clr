@@ -44,7 +44,7 @@ if [ "$?" -eq 0 ]; then
 	fi
 
 	# Try and get a real "tag relative" version name for it.
-	version=`git describe --tags HEAD 2>&1`
+	version=`git describe --abbrev=0 --tags HEAD 2>&1`
 	if [ "$?" -ne 0 ]; then
 		# ok, desperation just take the commit id.
 		version=`git log | awk '{ print $2; exit }'`
